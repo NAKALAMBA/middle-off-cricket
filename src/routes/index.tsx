@@ -1,26 +1,50 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
+import { Featured } from "@/components/Featured";
+import { Categories } from "@/components/Categories";
+import { Signature } from "@/components/Signature";
+import { About } from "@/components/About";
+import { InstagramFeed } from "@/components/InstagramFeed";
+import { Newsletter } from "@/components/Newsletter";
+import { Footer } from "@/components/Footer";
+import { BackToTop } from "@/components/BackToTop";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Middle Off — Where Cricket Gets Serious" },
+      {
+        name: "description",
+        content:
+          "Premium cricket media and analytics. Data-driven analysis, deep dives, and stories for fans who see beyond the scoreboard.",
+      },
+      { property: "og:title", content: "Middle Off — Where Cricket Gets Serious" },
+      {
+        property: "og:description",
+        content:
+          "Editorial cricket analysis, heatmaps, wagon wheels, and tactical breakdowns from IPL to Tests.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background text-foreground">
+      <Header />
+      <main>
+        <Hero />
+        <Featured />
+        <Categories />
+        <Signature />
+        <About />
+        <InstagramFeed />
+        <Newsletter />
+      </main>
+      <Footer />
+      <BackToTop />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
