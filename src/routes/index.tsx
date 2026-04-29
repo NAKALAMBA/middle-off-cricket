@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { Featured } from "@/components/Featured";
 import { Categories } from "@/components/Categories";
-import { Signature } from "@/components/Signature";
+import { Products } from "@/components/Products";
+import { Testimonials } from "@/components/Testimonials";
+import { ShopMarquee } from "@/components/ShopMarquee";
+import { Featured } from "@/components/Featured";
 import { About } from "@/components/About";
-import { InstagramFeed } from "@/components/InstagramFeed";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
@@ -13,17 +14,17 @@ import { BackToTop } from "@/components/BackToTop";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Middle Off — Where Cricket Gets Serious" },
+      { title: "Middle Off — Premium Cricket Gear & Analysis" },
       {
         name: "description",
         content:
-          "Premium cricket media and analytics. Data-driven analysis, deep dives, and stories for fans who see beyond the scoreboard.",
+          "Premium cricket bats, balls, pads, gloves and protection — built for players who read the game. Free shipping over ₹2,000, 30-day returns.",
       },
-      { property: "og:title", content: "Middle Off — Where Cricket Gets Serious" },
+      { property: "og:title", content: "Middle Off — Premium Cricket Gear & Analysis" },
       {
         property: "og:description",
         content:
-          "Editorial cricket analysis, heatmaps, wagon wheels, and tactical breakdowns from IPL to Tests.",
+          "Match-grade cricket gear with honest pricing. Trusted by 10,000+ players. Plus deep cricket analysis on the side.",
       },
     ],
   }),
@@ -36,11 +37,12 @@ function Index() {
       <Header />
       <main>
         <Hero />
-        <Featured />
+        <Products />
+        <Testimonials />
+        <ShopMarquee />
         <Categories />
-        <Signature />
+        <Featured />
         <About />
-        <InstagramFeed />
         <Newsletter />
       </main>
       <Footer />
