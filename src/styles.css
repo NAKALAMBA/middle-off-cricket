@@ -103,6 +103,7 @@
   --gradient-pitch: linear-gradient(135deg, var(--pitch), var(--pitch-glow));
   --shadow-glow-gold: 0 10px 40px -12px oklch(0.74 0.16 75 / 0.55);
   --shadow-glow-navy: 0 18px 50px -18px oklch(0.22 0.04 260 / 0.45);
+  --shadow-glow-pitch: 0 10px 40px -12px oklch(0.62 0.13 155 / 0.45);
   --shadow-elevated: 0 30px 60px -25px oklch(0.16 0.025 260 / 0.25);
   --shadow-card: 0 1px 2px oklch(0.16 0.025 260 / 0.04), 0 8px 30px -12px oklch(0.16 0.025 260 / 0.08);
 }
