@@ -128,11 +128,11 @@ export function Products() {
                           onClick={(e) => {
                             e.preventDefault();
                             add({
-                              id: p.id,
+                              productId: p.id,
                               slug: p.slug,
                               name: p.name,
-                              price_inr: p.price_inr,
-                              image: p.image_url ?? p.slug,
+                              unitPrice: p.price_inr,
+                              image: resolveProductImage(p.image_url ?? p.slug),
                             });
                             toast.success(`${p.name} added to cart`);
                           }}
