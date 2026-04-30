@@ -29,7 +29,8 @@ function AdminReviews() {
   if (!ready) return null;
 
   const toggle = async (t: Testimonial, key: "is_approved" | "is_featured") => {
-    const { error } = await supabase.from("testimonials").update({ [key]: !t[key] }).eq("id", t.id);
+    const update = key === "is_approved" ? { is_approved: !t.is_approved } : { is_featured: !t.is_featured };
+    const { error } = await supabase.from("testimonials").update(update).eq("id", t.id);
     if (error) return toast.error(error.message);
     void load();
   };

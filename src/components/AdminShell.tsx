@@ -3,12 +3,12 @@ import { useAuth } from "@/lib/auth";
 import { LayoutDashboard, Package, ShoppingBag, MessageSquareQuote, LogOut } from "lucide-react";
 import type { ReactNode } from "react";
 
-const NAV = [
+const NAV: { to: "/admin" | "/admin/products" | "/admin/orders" | "/admin/reviews"; label: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { to: "/admin/reviews", label: "Reviews", icon: MessageSquareQuote },
-] as const;
+];
 
 export function AdminShell({ title, children }: { title: string; children: ReactNode }) {
   const { signOut, user } = useAuth();
