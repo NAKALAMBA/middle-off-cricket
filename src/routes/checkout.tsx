@@ -1,11 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { Truck, Loader2 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { formatINR } from "@/lib/product-images";
+import { getShippingRates } from "@/lib/shipping.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/checkout")({
@@ -22,12 +25,30 @@ function CheckoutPage() {
     customer_name: "", customer_email: user?.email ?? "", customer_phone: "",
     shipping_address: "", shipping_city: "", shipping_state: "", shipping_pincode: "",
   });
+  const [courier, setCourier] = useState<{ name: string; rate_inr: number; eta: string } | null>(null);
+  const [couriers, setCouriers] = useState<Array<{ name: string; rate_inr: number; eta: string }>>([]);
+  const [ratesLoading, setRatesLoading] = useState(false);
+  const fetchRates = useServerFn(getShippingRates);
 
   const sub = subtotal();
-  const shipping = sub >= 2000 ? 0 : 99;
+  const fallbackShipping = sub >= 2000 ? 0 : 99;
+  const shipping = courier ? courier.rate_inr : fallbackShipping;
   const total = sub + shipping;
 
   const set = (k: keyof typeof form, v: string) => setForm({ ...form, [k]: v });
+
+  const checkRates = async () => {
+    if (!/^\d{6}$/.test(form.shipping_pincode)) return toast.error("Enter a valid 6-digit pincode");
+    setRatesLoading(true);
+    const weight = Math.max(0.5, items.reduce((s, i) => s + i.quantity * 0.6, 0));
+    const res = await fetchRates({ data: { delivery_pincode: form.shipping_pincode, weight_kg: Number(weight.toFixed(2)), cod: false } });
+    setRatesLoading(false);
+    if (!res.ok) return toast.error("Shipping check failed: " + res.error);
+    if (res.couriers.length === 0) return toast.error("No couriers serve this pincode yet");
+    setCouriers(res.couriers);
+    setCourier(res.couriers[0]);
+    toast.success(`Found ${res.couriers.length} courier options`);
+  };
 
   const placeOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +99,29 @@ function CheckoutPage() {
                   placeholder={label as string}
                   className="w-full px-4 py-3 rounded-full bg-background border border-border focus:border-navy focus:outline-none focus:ring-2 focus:ring-ring" />
               ))}
+              <div className="pt-2">
+                <button type="button" onClick={checkRates} disabled={ratesLoading}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border hover:border-primary hover:text-primary text-sm transition-colors disabled:opacity-60">
+                  {ratesLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Truck className="w-4 h-4" />}
+                  Check live shipping rates
+                </button>
+                {couriers.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {couriers.map((c) => (
+                      <label key={c.name} className={`flex items-center justify-between gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${courier?.name === c.name ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}>
+                        <div className="flex items-center gap-3 min-w-0">
+                          <input type="radio" name="courier" checked={courier?.name === c.name} onChange={() => setCourier(c)} className="accent-primary" />
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium truncate">{c.name}</p>
+                            <p className="text-[11px] text-muted-foreground">ETA {c.eta}</p>
+                          </div>
+                        </div>
+                        <span className="text-sm font-semibold">{formatINR(c.rate_inr)}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             <aside className="bg-card border border-border rounded-2xl p-6 h-fit">
               <h2 className="font-serif text-xl mb-5 text-navy-deep">Summary</h2>

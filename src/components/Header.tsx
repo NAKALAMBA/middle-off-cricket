@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, X, ShoppingBag, Search, User, LogOut, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { WicketMark } from "./WicketMark";
+import { ThemeToggle } from "./ThemeToggle";
 import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/cart";
 
@@ -64,6 +65,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
+          <ThemeToggle />
           <button
             aria-label="Search"
             className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-navy hover:text-navy transition-colors"
