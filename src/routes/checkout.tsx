@@ -99,6 +99,29 @@ function CheckoutPage() {
                   placeholder={label as string}
                   className="w-full px-4 py-3 rounded-full bg-background border border-border focus:border-navy focus:outline-none focus:ring-2 focus:ring-ring" />
               ))}
+              <div className="pt-2">
+                <button type="button" onClick={checkRates} disabled={ratesLoading}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border hover:border-primary hover:text-primary text-sm transition-colors disabled:opacity-60">
+                  {ratesLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Truck className="w-4 h-4" />}
+                  Check live shipping rates
+                </button>
+                {couriers.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {couriers.map((c) => (
+                      <label key={c.name} className={`flex items-center justify-between gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${courier?.name === c.name ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}>
+                        <div className="flex items-center gap-3 min-w-0">
+                          <input type="radio" name="courier" checked={courier?.name === c.name} onChange={() => setCourier(c)} className="accent-primary" />
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium truncate">{c.name}</p>
+                            <p className="text-[11px] text-muted-foreground">ETA {c.eta}</p>
+                          </div>
+                        </div>
+                        <span className="text-sm font-semibold">{formatINR(c.rate_inr)}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             <aside className="bg-card border border-border rounded-2xl p-6 h-fit">
               <h2 className="font-serif text-xl mb-5 text-navy-deep">Summary</h2>
